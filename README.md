@@ -156,3 +156,7 @@ function createResponse(payload) {
 
 ## 🕌 Pondok Pesantren Darul Kamal
 *Mencetak Generasi Qur'ani yang Berakhlakul Karimah dan Berwawasan Luas.*
+=======
+# e-tahfidz
+sistem monitoring hafalan al qur'an di pesantren darul kamal
+>>>>>>> b329c707afbedef8530214647af8c535c7ca4d7f
