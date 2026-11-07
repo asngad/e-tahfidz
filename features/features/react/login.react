@@ -1,0 +1,20 @@
+<form data-testid="login-form">
+  <input
+    data-testid="username"
+    type="text"
+    placeholder="Username"
+  />
+
+  <input
+    data-testid="password"
+    type="password"
+    placeholder="Password"
+  />
+
+  <button
+    data-testid="login-button"
+    type="submit"
+  >
+    Login
+  </button>
+</form>

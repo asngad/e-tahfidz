@@ -1,0 +1,29 @@
+
+Feature: Login Aplikasi E-Tahfidz
+
+  Sebagai pengguna E-Tahfidz
+  Saya ingin melakukan login
+  Agar dapat menggunakan fitur sesuai hak akses
+
+  Background:
+    Given pengguna membuka halaman login E-Tahfidz
+
+  @positive
+  Scenario: Login berhasil
+    When pengguna memasukkan username "admin"
+    And pengguna memasukkan password yang valid
+    And pengguna menekan tombol login
+    Then pengguna berhasil masuk ke dashboard
+
+  @negative
+  Scenario: Login menggunakan password salah
+    When pengguna memasukkan username "admin"
+    And pengguna memasukkan password yang salah
+    And pengguna menekan tombol login
+    Then sistem menampilkan pesan kesalahan login
+
+  @validation
+  Scenario: Login dengan kolom kosong
+    When pengguna tidak memasukkan username dan password
+    And pengguna menekan tombol login
+    Then sistem menampilkan validasi input
