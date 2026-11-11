@@ -128,7 +128,7 @@ npm run test:bdd         # BDD Cucumber + Playwright (features/ & steps/)
 
 ### Setup SonarQube Cloud
 
-1. Buat proyek di [SonarQube Cloud](https://sonarcloud.io/) (mis. organisasi `asngad`, project key `asngad_e-tahfidz`).
+1. Buat proyek di [SonarQube Cloud](https://sonarcloud.io/) (organisasi `asngad-eng`, project key `asngad_e-tahfidz`).
 2. Sesuaikan `sonar.organization` dan `sonar.projectKey` di file [`sonar-project.properties`](sonar-project.properties) dengan proyek Anda.
 3. Buat **Personal Access Token** di SonarQube Cloud, lalu simpan sebagai repository secret GitHub bernama **`SONAR_TOKEN`** (Settings → Secrets and variables → Actions → New repository secret).
 4. Push ke GitHub — workflow `CI & SonarQube` akan menjalankan typecheck, lint, test + coverage, lalu mengirim hasil scan ke SonarQube Cloud.
