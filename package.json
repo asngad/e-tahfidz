@@ -17,7 +17,8 @@
     "test:bdd": "bddgen && playwright test",
     "test:bdd:headed": "bddgen && playwright test --headed",
     "test:bdd:debug": "bddgen && playwright test --debug",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "sonar": "npx --yes sonarqube-scanner"
   },
   "dependencies": {
     "react": "^18.2.0",
