@@ -14,3 +14,4 @@ cucumber.json
 *.zip
 metadata.json
 migrated_prompt_history/
+.sonar-token
