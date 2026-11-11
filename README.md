@@ -1,5 +1,12 @@
 # 📖 E-Tahfidz Pondok Pesantren Darul Kamal
 
+[![CI & SonarQube](https://github.com/asngad/e-tahfidz/actions/workflows/ci.yml/badge.svg)](https://github.com/asngad/e-tahfidz/actions/workflows/ci.yml)
+[![SonarQube Cloud](https://sonarcloud.io/api/project_badges?measure=alert_status&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+[![Reliability](https://sonarcloud.io/api/project_badges?measure=reliability_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+[![Maintainability](https://sonarcloud.io/api/project_badges?measure=sqale_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+[![Security](https://sonarcloud.io/api/project_badges?measure=security_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+[![Coverage](https://sonarcloud.io/api/project_badges?measure=coverage&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+
 Sistem Informasi Manajemen Tahfidz Al-Qur'an berbasis Web untuk **Pondok Pesantren Darul Kamal**. Aplikasi ini dirancang untuk mempermudah pencatatan setoran hafalan santri (*Ziyadah* dan *Muroja'ah*), pemantauan progres 30 Juz, penilaian tajwid, serta dapat beroperasi secara **Offline/Lokal** maupun terhubung dengan **Google Sheets** via **Google Apps Script (GAS)**.
 
 ---
@@ -65,6 +72,67 @@ Anda dapat langsung masuk ke aplikasi menggunakan akun bawaan atau menekan tombo
    ```bash
    npm run build
    ```
+
+---
+
+## 🧪 Quality Assurance (Unit Test, Linter, SonarQube)
+
+Semua pemeriksaan kualitas berjalan otomatis di GitHub Actions (`.github/workflows/ci.yml`) pada setiap *push* dan *pull request* ke `main` / `master` / `develop`.
+
+| Kriteria | Perintah | Status |
+| :--- | :--- | :--- |
+| **Unit Test (wajib)** | `npm test` — 196 test / 14 file (Vitest 3, frontend + backend) | ✅ Lulus |
+| **Linter (wajib)** | `npm run lint` — ESLint 9 flat config (TypeScript + Express) | ✅ 0 error |
+| **Type Check (wajib)** | `npm run typecheck` — `tsc --noEmit` | ✅ Lulus |
+| **Coverage (opsional, target ≥ 80%)** | `npm run test:coverage` — Vitest v8 coverage + threshold 80% | ✅ Stmts 98.68% · Lines 98.68% · Branch 86.44% · Funcs 95.80% |
+| **Integration Testing (opsional)** | `features/` + `steps/` (Cucumber/Playwright BDD) | 🔶 Terpisah dari CI |
+| **SonarQube (wajib)** | Scan SonarQube Cloud via `sonarqube-scan-action` | ✅ Terkonfigurasi |
+
+### Perintah Lengkap
+
+```bash
+npm test              # Jalankan seluruh unit test (frontend + backend)
+npm run test:watch    # Mode watch saat development
+npm run test:coverage # Unit test + laporan coverage (threshold 80%)
+npm run test:server   # Khusus unit test backend (Express + MySQL)
+npm run lint          # Cek lint tanpa mengubah file
+npm run lint:fix      # Perbaiki otomatis masalah lint yang bisa diperbaiki
+npm run typecheck     # Cek tipe TypeScript tanpa menghasilkan output
+```
+
+### Struktur Test
+
+```
+├── App.test.tsx                    # Test komponen App (routing auth)
+├── index.test.tsx                  # Test entry point (mount ke #root)
+├── mockData.test.ts                # Test helper data mock
+├── components/
+│   ├── Dashboard.test.tsx          # 69 test: modul 30 juz, setoran, jurnal, dll.
+│   └── LoginScreen.test.tsx        # 24 test: login, drawer, clipboard, dsb.
+├── services/apiService.test.ts     # Test layer HTTP ke Google Apps Script
+└── server/tests/                   # Test backend Express (supertest + mock DB)
+    ├── app.test.js                 # Health check & routing dasar
+    ├── authRoutes.test.js          # Login, /me, otorisasi, error handling
+    ├── database.test.js            # Koneksi MySQL (success/failure path)
+    ├── santriSurah.test.js         # API santri & surah
+    ├── santriRoutes.test.js        # CRUD santri
+    └── setoran.test.js             # API setoran (GET/POST/PATCH)
+```
+
+### Menjalankan Integration Testing (Opsional)
+
+```bash
+npx playwright install   # sekali saja
+npm run test:bdd         # BDD Cucumber + Playwright (features/ & steps/)
+```
+
+### Setup SonarQube Cloud
+
+1. Buat proyek di [SonarQube Cloud](https://sonarcloud.io/) (mis. organisasi `asngad`, project key `asngad_e-tahfidz`).
+2. Sesuaikan `sonar.organization` dan `sonar.projectKey` di file [`sonar-project.properties`](sonar-project.properties) dengan proyek Anda.
+3. Buat **Personal Access Token** di SonarQube Cloud, lalu simpan sebagai repository secret GitHub bernama **`SONAR_TOKEN`** (Settings → Secrets and variables → Actions → New repository secret).
+4. Push ke GitHub — workflow `CI & SonarQube` akan menjalankan typecheck, lint, test + coverage, lalu mengirim hasil scan ke SonarQube Cloud.
+5. Pasang *Quality Gate* **Sonar way** (Reliability A, Maintainability A, Security A) dan pantau badge di atas README.
 
 ---
 
@@ -156,7 +224,3 @@ function createResponse(payload) {
 
 ## 🕌 Pondok Pesantren Darul Kamal
 *Mencetak Generasi Qur'ani yang Berakhlakul Karimah dan Berwawasan Luas.*
-=======
-# e-tahfidz
-sistem monitoring hafalan al qur'an di pesantren darul kamal
->>>>>>> b329c707afbedef8530214647af8c535c7ca4d7f

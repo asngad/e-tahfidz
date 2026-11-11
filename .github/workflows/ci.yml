@@ -1,0 +1,58 @@
+name: CI & SonarQube
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Typecheck · Lint · Test · SonarQube
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout (fetch-depth 0 dibutuhkan SonarQube untuk blame/new code)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      # ── 3. Install dependensi (wajib, deterministik via package-lock.json)
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Typecheck (wajib)
+      - name: TypeScript type check
+        run: npm run typecheck
+
+      # ── 5. Linter (wajib)
+      - name: ESLint
+        run: npm run lint
+
+      # ── 6. Unit test + coverage (wajib; threshold 80% per metrik)
+      - name: Unit test with coverage
+        run: npm run test:coverage
+
+      # ── 7. Upload laporan coverage sebagai artefak CI
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+      # ── 8. SonarQube Cloud scan (wajib)
+      #     Butuh repository secret: SONAR_TOKEN
+      - name: SonarQube Cloud Scan
+        uses: SonarSource/sonarqube-scan-action@v8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io

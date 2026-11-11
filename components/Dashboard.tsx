@@ -89,13 +89,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
         : null) || santriList[0] || INITIAL_SANTRI[0];
 
     const [selectedJuzSantriId, setSelectedJuzSantriId] = useState<string>(() => currentSantri?.id || 's-1');
-    const activeJuzSantri = santriList.find(s => s.id === selectedJuzSantriId) || currentSantri || santriList[0] || INITIAL_SANTRI[0];
-
-    useEffect(() => {
-        if (isSantri && currentSantri?.id) {
-            setSelectedJuzSantriId(currentSantri.id);
-        }
-    }, [isSantri, currentSantri?.id]);
+    // Santri selalu melihat peta juz miliknya sendiri; admin/ustadz mengikuti pilihan select.
+    const activeJuzSantriId = isSantri ? currentSantri?.id || selectedJuzSantriId : selectedJuzSantriId;
+    const activeJuzSantri = santriList.find(s => s.id === activeJuzSantriId) || currentSantri || santriList[0] || INITIAL_SANTRI[0];
 
     // Filters
     const [searchQuery, setSearchQuery] = useState('');
