@@ -18,7 +18,8 @@
     "test:bdd:headed": "bddgen && playwright test --headed",
     "test:bdd:debug": "bddgen && playwright test --debug",
     "test:report": "playwright show-report",
-    "sonar": "npx --yes sonarqube-scanner"
+    "sonar": "node scripts/sonar.js",
+    "sonar:local": "powershell -ExecutionPolicy Bypass -File ./run-sonar.ps1"
   },
   "dependencies": {
     "react": "^18.2.0",

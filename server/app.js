@@ -7,6 +7,7 @@ const surahRoutes = require('./routes/surah');
 const setoranRoutes = require('./routes/setoran');
 
 const app = express();
+app.disable('x-powered-by');
 
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:5173'

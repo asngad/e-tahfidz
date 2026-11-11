@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: https://sonarcloud.io
+      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
     steps:
       # ── 1. Checkout (fetch-depth 0 dibutuhkan SonarQube untuk blame/new code)
@@ -56,13 +56,13 @@ jobs:
           path: coverage/
           retention-days: 7
 
-      # ── 8. SonarQube Cloud scan (wajib)
-      #     Butuh repository secret: SONAR_TOKEN (Settings → Secrets → Actions)
-      #     Langkah ini otomatis dilewati selama token belum diatur.
-      - name: SonarQube Cloud Scan
-        if: ${{ env.SONAR_TOKEN != '' }}
+      # ── 8. SonarQube scan (wajib)
+      #     Aktif hanya bila repository variable SONAR_HOST_URL dan
+      #     secret SONAR_TOKEN sudah diatur (SonarQube server/Cloud).
+      - name: SonarQube Scan
+        if: ${{ env.SONAR_HOST_URL != '' && env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarqube-scan-action@v8
 
-      - name: SonarQube token belum diatur
-        if: ${{ env.SONAR_TOKEN == '' }}
-        run: echo "::notice::SONAR_TOKEN belum diatur — tambahkan repository secret agar scan SonarQube Cloud berjalan."
+      - name: SonarQube belum dikonfigurasi
+        if: ${{ env.SONAR_HOST_URL == '' || env.SONAR_TOKEN == '' }}
+        run: echo "::notice::SonarQube scan dilewati — atur repository variable SONAR_HOST_URL dan secret SONAR_TOKEN agar analisis berjalan."

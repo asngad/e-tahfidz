@@ -165,7 +165,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ apiUrl, setApiUrl, onL
     };
 
     const copyScriptToClipboard = () => {
-        navigator.clipboard.writeText(GOOGLE_SCRIPT_SAMPLE_CODE);
+        void navigator.clipboard.writeText(GOOGLE_SCRIPT_SAMPLE_CODE);
         setCopiedScript(true);
         setTimeout(() => setCopiedScript(false), 2500);
     };
@@ -260,7 +260,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ apiUrl, setApiUrl, onL
 
                 {/* Error Box */}
                 {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 p-3 text-xs rounded-xl mb-4 flex items-start gap-2.5">
+                    <div data-testid="login-error" className="bg-red-50 border border-red-200 text-red-700 p-3 text-xs rounded-xl mb-4 flex items-start gap-2.5">
                         <i className="fas fa-exclamation-circle text-red-500 mt-0.5 text-sm"></i>
                         <div>
                             <p className="font-bold">Perhatian</p>
@@ -270,8 +270,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ apiUrl, setApiUrl, onL
                 )}
 
                 {/* Login Form */}
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={handleLogin} data-testid="login-form" className="space-y-4">
                     <Input 
+                        data-testid="username"
                         label="ID Pengguna / NIS" 
                         placeholder="Contoh: admin atau 12345" 
                         value={id}
@@ -280,6 +281,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ apiUrl, setApiUrl, onL
                     />
 
                     <Input 
+                        data-testid="password"
                         label="Kata Sandi" 
                         type="password"
                         placeholder="Masukkan kata sandi..." 
@@ -289,6 +291,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ apiUrl, setApiUrl, onL
                     />
                     
                     <Button 
+                        data-testid="login-button"
                         type="submit" 
                         isLoading={loading} 
                         className="w-full py-3 text-sm font-bold shadow-lg shadow-emerald-700/20"

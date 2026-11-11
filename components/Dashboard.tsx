@@ -204,10 +204,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
             tanggal: new Date().toISOString().split('T')[0],
             kegiatan: jurnalKegiatan,
             surat: surahObj.nama,
-            ayatAwal: parseInt(jurnalAyatAwal) || 1,
-            ayatAkhir: parseInt(jurnalAyatAkhir) || surahObj.ayat,
-            juz: parseInt(jurnalJuz) || surahObj.juz,
-            durasiMenit: parseInt(jurnalDurasi) || 30,
+            ayatAwal: Number.parseInt(jurnalAyatAwal) || 1,
+            ayatAkhir: Number.parseInt(jurnalAyatAkhir) || surahObj.ayat,
+            juz: Number.parseInt(jurnalJuz) || surahObj.juz,
+            durasiMenit: Number.parseInt(jurnalDurasi) || 30,
             tingkatKelancaran: jurnalKelancaran,
             catatanAyatSulit: jurnalCatatanSulit.trim() || 'Alhamdulillah lancar dan dipahami',
             status: 'Selesai'
@@ -223,8 +223,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                     streakHari: (s.streakHari || 14) + 1,
                     lastReadBookmark: {
                         surat: surahObj.nama,
-                        ayat: parseInt(jurnalAyatAkhir) || surahObj.ayat,
-                        juz: parseInt(jurnalJuz) || surahObj.juz,
+                        ayat: Number.parseInt(jurnalAyatAkhir) || surahObj.ayat,
+                        juz: Number.parseInt(jurnalJuz) || surahObj.juz,
                         tanggal: new Date().toISOString().split('T')[0]
                     }
                 };
@@ -246,9 +246,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
             waktu: rencanaWaktu,
             jenis: rencanaJenis,
             surat: surahObj.nama,
-            ayatAwal: parseInt(rencanaAyatAwal) || 1,
-            ayatAkhir: parseInt(rencanaAyatAkhir) || 20,
-            juz: parseInt(rencanaJuz) || surahObj.juz,
+            ayatAwal: Number.parseInt(rencanaAyatAwal) || 1,
+            ayatAkhir: Number.parseInt(rencanaAyatAkhir) || 20,
+            juz: Number.parseInt(rencanaJuz) || surahObj.juz,
             status: 'Diajukan',
             catatanSantri: rencanaCatatan.trim() || 'InsyaAllah sudah dimuroja\'ah mandiri'
         };
@@ -271,7 +271,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                     ...s,
                     lastReadBookmark: {
                         surat: surahObj.nama,
-                        ayat: parseInt(bmAyat) || 1,
+                        ayat: Number.parseInt(bmAyat) || 1,
                         juz: surahObj.juz,
                         tanggal: new Date().toISOString().split('T')[0]
                     }
@@ -349,9 +349,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
             tanggal: new Date().toISOString().split('T')[0],
             jenis: formJenis,
             surat: surahObj.nama,
-            ayatAwal: parseInt(formAyatAwal) || 1,
-            ayatAkhir: parseInt(formAyatAkhir) || surahObj.ayat,
-            juz: parseInt(formJuz) || surahObj.juz,
+            ayatAwal: Number.parseInt(formAyatAwal) || 1,
+            ayatAkhir: Number.parseInt(formAyatAkhir) || surahObj.ayat,
+            juz: Number.parseInt(formJuz) || surahObj.juz,
             nilai: formNilai,
             musyrif: user?.nama || 'Ustadz Pembina',
             catatan: formCatatan.trim() || 'Alhamdulillah lancar dan tartil'
@@ -361,7 +361,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
         setSantriList(santriList.map(s => {
             if (s.id === targetSantri.id) {
-                const calculatedJuz = Math.max(s.totalHafalanJuz, formJenis === 'Ziyadah' ? parseInt(formJuz) || s.totalHafalanJuz : s.totalHafalanJuz);
+                const calculatedJuz = Math.max(s.totalHafalanJuz, formJenis === 'Ziyadah' ? Number.parseInt(formJuz) || s.totalHafalanJuz : s.totalHafalanJuz);
                 return {
                     ...s,
                     totalHafalanJuz: calculatedJuz,
@@ -379,7 +379,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
         e.preventDefault();
         if (!newNama.trim() || !newNis.trim()) return;
 
-        const totalJuzInt = parseInt(newTotalJuz) || 0;
+        const totalJuzInt = Number.parseInt(newTotalJuz) || 0;
         const newSantri: Santri = {
             id: `s-${Date.now()}`,
             nis: newNis.trim(),
@@ -479,7 +479,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
         : [];
 
     return (
-        <div className="flex flex-col md:flex-row h-screen bg-gray-50 overflow-hidden font-sans">
+        <div className="flex flex-col md:flex-row h-screen bg-gray-50 overflow-hidden font-sans" data-testid="dashboard">
             {/* Sidebar Desktop */}
             <aside className="bg-emerald-900 text-white w-full md:w-64 hidden md:flex flex-col shadow-2xl z-20 shrink-0">
                 <div className="p-6 border-b border-emerald-800/80 text-center">
@@ -592,6 +592,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                         onClick={onLogout} 
                         className="w-full py-2 text-xs flex justify-center items-center"
                         icon="fas fa-sign-out-alt"
+                        data-testid="logout-button"
                     >
                         Keluar Akun
                     </Button>
@@ -1138,8 +1139,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                                 {!isSantri && (
                                     <div className="flex items-center gap-2 self-start lg:self-auto bg-gray-50 p-2 rounded-xl border border-gray-200">
-                                        <label className="text-xs font-bold text-gray-700 whitespace-nowrap">Pilih Santri:</label>
-                                        <select
+                                        <label htmlFor="dash-field-1" className="text-xs font-bold text-gray-700 whitespace-nowrap">Pilih Santri:</label>
+                                        <select id="dash-field-1"
                                             value={selectedJuzSantriId}
                                             onChange={(e) => setSelectedJuzSantriId(e.target.value)}
                                             className="bg-white border border-gray-300 text-xs font-semibold rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-emerald-500 text-gray-800"
@@ -1301,7 +1302,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     return (
                                         <div
                                             key={meta.juz}
+                                            role="button"
+                                            tabIndex={0}
                                             onClick={() => handleOpenJuzModal(meta.juz)}
+                                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleOpenJuzModal(meta.juz); }}
                                             className={`rounded-2xl p-4 border text-left cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg relative overflow-hidden flex flex-col justify-between ${
                                                 isMutqin
                                                     ? 'bg-gradient-to-br from-emerald-700 to-teal-800 text-white border-emerald-600 shadow-sm'
@@ -1709,10 +1713,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="space-y-3">
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                                    <label htmlFor="dash-field-2" className="block text-xs font-bold text-gray-700 uppercase mb-1">
                                         URL Web App Google Apps Script (/exec)
                                     </label>
-                                    <input 
+                                    <input id="dash-field-2" 
                                         type="text" 
                                         placeholder="https://script.google.com/macros/s/.../exec"
                                         value={inputUrl}
@@ -1827,8 +1831,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                         <form onSubmit={handleSaveJurnal} className="space-y-3.5 text-xs">
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Jenis Aktivitas</label>
-                                    <select
+                                    <label htmlFor="dash-field-3" className="block font-bold text-gray-700 mb-1">Jenis Aktivitas</label>
+                                    <select id="dash-field-3"
                                         value={jurnalKegiatan}
                                         onChange={(e) => setJurnalKegiatan(e.target.value as any)}
                                         className="w-full border border-gray-300 p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -1840,8 +1844,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Durasi Belajar (Menit)</label>
-                                    <input 
+                                    <label htmlFor="dash-field-4" className="block font-bold text-gray-700 mb-1">Durasi Belajar (Menit)</label>
+                                    <input id="dash-field-4" 
                                         type="number"
                                         min="5"
                                         max="240"
@@ -1854,11 +1858,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
-                                <select
+                                <label htmlFor="dash-field-5" className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
+                                <select id="dash-field-5"
                                     value={jurnalSurahNomor}
                                     onChange={(e) => {
-                                        const num = parseInt(e.target.value);
+                                        const num = Number.parseInt(e.target.value);
                                         setJurnalSurahNomor(num);
                                         const s = QURAN_SURAHS.find(q => q.nomor === num);
                                         if (s) {
@@ -1879,8 +1883,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-3 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
-                                    <input 
+                                    <label htmlFor="dash-field-6" className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
+                                    <input id="dash-field-6" 
                                         type="number"
                                         min="1"
                                         value={jurnalAyatAwal}
@@ -1890,8 +1894,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
-                                    <input 
+                                    <label htmlFor="dash-field-7" className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
+                                    <input id="dash-field-7" 
                                         type="number"
                                         min="1"
                                         value={jurnalAyatAkhir}
@@ -1901,8 +1905,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Juz</label>
-                                    <input 
+                                    <label htmlFor="dash-field-8" className="block font-bold text-gray-700 mb-1">Juz</label>
+                                    <input id="dash-field-8" 
                                         type="number"
                                         min="1"
                                         max="30"
@@ -1915,8 +1919,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Tingkat Kelancaran Mandiri</label>
-                                <select
+                                <label htmlFor="dash-field-9" className="block font-bold text-gray-700 mb-1">Tingkat Kelancaran Mandiri</label>
+                                <select id="dash-field-9"
                                     value={jurnalKelancaran}
                                     onChange={(e) => setJurnalKelancaran(e.target.value as any)}
                                     className="w-full border border-gray-300 p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -1929,8 +1933,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Catatan Ayat Sulit / Mutasyabihat</label>
-                                <textarea 
+                                <label htmlFor="dash-field-10" className="block font-bold text-gray-700 mb-1">Catatan Ayat Sulit / Mutasyabihat</label>
+                                <textarea id="dash-field-10" 
                                     rows={3}
                                     placeholder="Contoh: Ayat 35 ada kemiripan dengan Surat Al-Baqarah, waqaf di kata..."
                                     value={jurnalCatatanSulit}
@@ -1983,8 +1987,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                         <form onSubmit={handleSaveRencana} className="space-y-3.5 text-xs">
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Tanggal Rencana</label>
-                                    <input 
+                                    <label htmlFor="dash-field-11" className="block font-bold text-gray-700 mb-1">Tanggal Rencana</label>
+                                    <input id="dash-field-11" 
                                         type="date"
                                         value={rencanaTanggal}
                                         onChange={(e) => setRencanaTanggal(e.target.value)}
@@ -1993,8 +1997,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Waktu Sesi</label>
-                                    <select
+                                    <label htmlFor="dash-field-12" className="block font-bold text-gray-700 mb-1">Waktu Sesi</label>
+                                    <select id="dash-field-12"
                                         value={rencanaWaktu}
                                         onChange={(e) => setRencanaWaktu(e.target.value as any)}
                                         className="w-full border border-gray-300 p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -2009,8 +2013,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Jenis Setoran</label>
-                                    <select
+                                    <label htmlFor="dash-field-13" className="block font-bold text-gray-700 mb-1">Jenis Setoran</label>
+                                    <select id="dash-field-13"
                                         value={rencanaJenis}
                                         onChange={(e) => setRencanaJenis(e.target.value as any)}
                                         className="w-full border border-gray-300 p-2.5 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -2020,11 +2024,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
-                                    <select
+                                    <label htmlFor="dash-field-14" className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
+                                    <select id="dash-field-14"
                                         value={rencanaSurahNomor}
                                         onChange={(e) => {
-                                            const num = parseInt(e.target.value);
+                                            const num = Number.parseInt(e.target.value);
                                             setRencanaSurahNomor(num);
                                             const s = QURAN_SURAHS.find(q => q.nomor === num);
                                             if (s) {
@@ -2046,8 +2050,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-3 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
-                                    <input 
+                                    <label htmlFor="dash-field-15" className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
+                                    <input id="dash-field-15" 
                                         type="number"
                                         min="1"
                                         value={rencanaAyatAwal}
@@ -2057,8 +2061,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
-                                    <input 
+                                    <label htmlFor="dash-field-16" className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
+                                    <input id="dash-field-16" 
                                         type="number"
                                         min="1"
                                         value={rencanaAyatAkhir}
@@ -2068,8 +2072,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Juz</label>
-                                    <input 
+                                    <label htmlFor="dash-field-17" className="block font-bold text-gray-700 mb-1">Juz</label>
+                                    <input id="dash-field-17" 
                                         type="number"
                                         min="1"
                                         max="30"
@@ -2082,8 +2086,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Pesan / Kesiapan untuk Ustadz</label>
-                                <textarea 
+                                <label htmlFor="dash-field-18" className="block font-bold text-gray-700 mb-1">Pesan / Kesiapan untuk Ustadz</label>
+                                <textarea id="dash-field-18" 
                                     rows={2}
                                     placeholder="Contoh: Sudah diulang 15x lancar di kamar, insyaAllah siap setor tasmi'..."
                                     value={rencanaCatatan}
@@ -2130,10 +2134,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                         <form onSubmit={handleSaveBookmark} className="space-y-3 text-xs">
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
-                                <select
+                                <label htmlFor="dash-field-19" className="block font-bold text-gray-700 mb-1">Surat Al-Qur'an</label>
+                                <select id="dash-field-19"
                                     value={bmSurahNomor}
-                                    onChange={(e) => setBmSurahNomor(parseInt(e.target.value))}
+                                    onChange={(e) => setBmSurahNomor(Number.parseInt(e.target.value))}
                                     className="w-full border border-gray-300 p-2 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
                                 >
                                     {QURAN_SURAHS.map(s => (
@@ -2145,8 +2149,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Sampai Ayat Ke-</label>
-                                <input 
+                                <label htmlFor="dash-field-20" className="block font-bold text-gray-700 mb-1">Sampai Ayat Ke-</label>
+                                <input id="dash-field-20" 
                                     type="number"
                                     min="1"
                                     value={bmAyat}
@@ -2246,8 +2250,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Status Juz</label>
-                                    <select 
+                                    <label htmlFor="dash-field-21" className="block font-bold text-gray-700 mb-1">Status Juz</label>
+                                    <select id="dash-field-21" 
                                         value={modalJuzStatus}
                                         onChange={(e) => setModalJuzStatus(e.target.value as any)}
                                         className="w-full border border-gray-300 p-2 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -2260,8 +2264,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Nilai Ujian Tasmi'</label>
-                                    <select 
+                                    <label htmlFor="dash-field-22" className="block font-bold text-gray-700 mb-1">Nilai Ujian Tasmi'</label>
+                                    <select id="dash-field-22" 
                                         value={modalJuzNilai}
                                         onChange={(e) => setModalJuzNilai(e.target.value)}
                                         className="w-full border border-gray-300 p-2 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 bg-white"
@@ -2277,8 +2281,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Tanggal Ujian Tasmi'</label>
-                                    <input 
+                                    <label htmlFor="dash-field-23" className="block font-bold text-gray-700 mb-1">Tanggal Ujian Tasmi'</label>
+                                    <input id="dash-field-23" 
                                         type="date"
                                         value={modalJuzTanggal}
                                         onChange={(e) => setModalJuzTanggal(e.target.value)}
@@ -2287,8 +2291,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ustadz Penguji</label>
-                                    <input 
+                                    <label htmlFor="dash-field-24" className="block font-bold text-gray-700 mb-1">Ustadz Penguji</label>
+                                    <input id="dash-field-24" 
                                         type="text"
                                         value={modalJuzPenguji}
                                         onChange={(e) => setModalJuzPenguji(e.target.value)}
@@ -2299,8 +2303,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Catatan Evaluasi / Ayat Mutasyabihat</label>
-                                <textarea 
+                                <label htmlFor="dash-field-25" className="block font-bold text-gray-700 mb-1">Catatan Evaluasi / Ayat Mutasyabihat</label>
+                                <textarea id="dash-field-25" 
                                     rows={2}
                                     placeholder="Contoh: Sangat fasih, hati-hati ayat mutasyabihat di pertengahan surat..."
                                     value={modalJuzCatatan}
@@ -2350,8 +2354,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                         <form onSubmit={handleSaveSetoran} className="space-y-3.5 text-xs">
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Pilih Santri</label>
-                                <select 
+                                <label htmlFor="dash-field-26" className="block font-bold text-gray-700 mb-1">Pilih Santri</label>
+                                <select id="dash-field-26" 
                                     value={selectedSantriId}
                                     onChange={(e) => setSelectedSantriId(e.target.value)}
                                     className="w-full border border-gray-300 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
@@ -2366,8 +2370,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Jenis Setoran</label>
-                                    <select 
+                                    <label htmlFor="dash-field-27" className="block font-bold text-gray-700 mb-1">Jenis Setoran</label>
+                                    <select id="dash-field-27" 
                                         value={formJenis}
                                         onChange={(e) => setFormJenis(e.target.value as any)}
                                         className="w-full border border-gray-300 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
@@ -2377,8 +2381,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Juz</label>
-                                    <input 
+                                    <label htmlFor="dash-field-28" className="block font-bold text-gray-700 mb-1">Juz</label>
+                                    <input id="dash-field-28" 
                                         type="number" 
                                         min="1" 
                                         max="30"
@@ -2391,10 +2395,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Nama Surat Al-Qur'an</label>
-                                <select
+                                <label htmlFor="dash-field-29" className="block font-bold text-gray-700 mb-1">Nama Surat Al-Qur'an</label>
+                                <select id="dash-field-29"
                                     value={selectedSurahNomor}
-                                    onChange={(e) => handleSurahChange(parseInt(e.target.value))}
+                                    onChange={(e) => handleSurahChange(Number.parseInt(e.target.value))}
                                     className="w-full border border-gray-300 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
                                 >
                                     {QURAN_SURAHS.map(s => (
@@ -2407,8 +2411,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
-                                    <input 
+                                    <label htmlFor="dash-field-30" className="block font-bold text-gray-700 mb-1">Ayat Awal</label>
+                                    <input id="dash-field-30" 
                                         type="number" 
                                         min="1"
                                         value={formAyatAwal}
@@ -2418,8 +2422,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
-                                    <input 
+                                    <label htmlFor="dash-field-31" className="block font-bold text-gray-700 mb-1">Ayat Akhir</label>
+                                    <input id="dash-field-31" 
                                         type="number" 
                                         min="1"
                                         value={formAyatAkhir}
@@ -2431,8 +2435,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Nilai / Predikat</label>
-                                <select 
+                                <label htmlFor="dash-field-32" className="block font-bold text-gray-700 mb-1">Nilai / Predikat</label>
+                                <select id="dash-field-32" 
                                     value={formNilai}
                                     onChange={(e) => setFormNilai(e.target.value as any)}
                                     className="w-full border border-gray-300 p-2.5 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
@@ -2445,8 +2449,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Catatan Tajwid / Makhorijul Huruf</label>
-                                <textarea 
+                                <label htmlFor="dash-field-33" className="block font-bold text-gray-700 mb-1">Catatan Tajwid / Makhorijul Huruf</label>
+                                <textarea id="dash-field-33" 
                                     rows={3}
                                     placeholder="Catatan dari musyrif untuk evaluasi santri..."
                                     value={formCatatan}
@@ -2493,8 +2497,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                         <form onSubmit={handleSaveSantri} className="space-y-3 text-xs">
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Nomor Induk Santri (NIS)</label>
-                                <input 
+                                <label htmlFor="dash-field-34" className="block font-bold text-gray-700 mb-1">Nomor Induk Santri (NIS)</label>
+                                <input id="dash-field-34" 
                                     type="text" 
                                     placeholder="Contoh: 12351"
                                     value={newNis}
@@ -2505,8 +2509,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Nama Lengkap Santri</label>
-                                <input 
+                                <label htmlFor="dash-field-35" className="block font-bold text-gray-700 mb-1">Nama Lengkap Santri</label>
+                                <input id="dash-field-35" 
                                     type="text" 
                                     placeholder="Nama lengkap santri..."
                                     value={newNama}
@@ -2518,8 +2522,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Kelas</label>
-                                    <input 
+                                    <label htmlFor="dash-field-36" className="block font-bold text-gray-700 mb-1">Kelas</label>
+                                    <input id="dash-field-36" 
                                         type="text" 
                                         value={newKelas}
                                         onChange={(e) => setNewKelas(e.target.value)}
@@ -2527,8 +2531,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold text-gray-700 mb-1">Hafalan Awal (Juz)</label>
-                                    <input 
+                                    <label htmlFor="dash-field-37" className="block font-bold text-gray-700 mb-1">Hafalan Awal (Juz)</label>
+                                    <input id="dash-field-37" 
                                         type="number" 
                                         min="0"
                                         max="30"
@@ -2540,8 +2544,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Kelompok Halaqah</label>
-                                <input 
+                                <label htmlFor="dash-field-38" className="block font-bold text-gray-700 mb-1">Kelompok Halaqah</label>
+                                <input id="dash-field-38" 
                                     type="text" 
                                     value={newHalaqah}
                                     onChange={(e) => setNewHalaqah(e.target.value)}
@@ -2550,8 +2554,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, apiUrl = '
                             </div>
 
                             <div>
-                                <label className="block font-bold text-gray-700 mb-1">Ustadz Musyrif Pembina</label>
-                                <input 
+                                <label htmlFor="dash-field-39" className="block font-bold text-gray-700 mb-1">Ustadz Musyrif Pembina</label>
+                                <input id="dash-field-39" 
                                     type="text" 
                                     value={newMusyrif}
                                     onChange={(e) => setNewMusyrif(e.target.value)}

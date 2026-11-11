@@ -15,3 +15,4 @@ cucumber.json
 metadata.json
 migrated_prompt_history/
 .sonar-token
+.scannerwork/

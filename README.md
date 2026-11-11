@@ -1,13 +1,26 @@
 # 📖 E-Tahfidz Pondok Pesantren Darul Kamal
 
 [![CI & SonarQube](https://github.com/asngad/e-tahfidz/actions/workflows/ci.yml/badge.svg)](https://github.com/asngad/e-tahfidz/actions/workflows/ci.yml)
-[![SonarQube Cloud](https://sonarcloud.io/api/project_badges?measure=alert_status&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
-[![Reliability](https://sonarcloud.io/api/project_badges?measure=reliability_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
-[![Maintainability](https://sonarcloud.io/api/project_badges?measure=sqale_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
-[![Security](https://sonarcloud.io/api/project_badges?measure=security_rating&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
-[![Coverage](https://sonarcloud.io/api/project_badges?measure=coverage&projectKey=asngad_e-tahfidz)](https://sonarcloud.io/summary/new-code?id=asngad_e-tahfidz)
+[![Unit Test](https://img.shields.io/badge/unit%20test-196%20passed-brightgreen)](./docs/01-unit-testing.md)
+[![Coverage](https://img.shields.io/badge/coverage-98.68%25%20statements-brightgreen)](./docs/01-unit-testing.md)
+[![Linter](https://img.shields.io/badge/ESLint-0%20error-brightgreen)](./docs/02-linting-typecheck.md)
+[![BDD Integration](https://img.shields.io/badge/BDD%20Playwright-4%20passed-brightgreen)](./docs/03-integration-testing.md)
+[![SonarQube Quality Gate](https://img.shields.io/badge/Quality%20Gate-PASSED-brightgreen)](./docs/04-sonarqube-analysis.md)
+[![SonarQube Ratings](https://img.shields.io/badge/SonarQube-A%20%7C%20A%20%7C%20A-brightgreen)](./docs/04-sonarqube-analysis.md)
 
 Sistem Informasi Manajemen Tahfidz Al-Qur'an berbasis Web untuk **Pondok Pesantren Darul Kamal**. Aplikasi ini dirancang untuk mempermudah pencatatan setoran hafalan santri (*Ziyadah* dan *Muroja'ah*), pemantauan progres 30 Juz, penilaian tajwid, serta dapat beroperasi secara **Offline/Lokal** maupun terhubung dengan **Google Sheets** via **Google Apps Script (GAS)**.
+
+---
+
+## 📚 Dokumentasi Lengkap Demo Final Project (`/docs`)
+
+Seluruh laporan teknis dan tangkapan layar pengujian telah disusun secara komprehensif pada direktori [`/docs`](./docs/README.md):
+
+- 📊 [**Dokumentasi Utama & Executive Summary**](./docs/README.md)
+- 🧪 [**01. Unit Testing & Code Coverage Report (196 Tests Passed, 98.68% Coverage)**](./docs/01-unit-testing.md)
+- 🧹 [**02. Linter & Static Typing Report (ESLint 9 + TypeScript, 0 Errors)**](./docs/02-linting-typecheck.md)
+- 🎭 [**03. Integration Testing Report (Playwright + Cucumber BDD, 4 Skenario)**](./docs/03-integration-testing.md)
+- 🛡️ [**04. SonarQube Static Code Analysis (Reliability A, Security A, Maintainability A, Quality Gate OK)**](./docs/04-sonarqube-analysis.md)
 
 ---
 
@@ -81,23 +94,26 @@ Semua pemeriksaan kualitas berjalan otomatis di GitHub Actions (`.github/workflo
 
 | Kriteria | Perintah | Status |
 | :--- | :--- | :--- |
-| **Unit Test (wajib)** | `npm test` — 196 test / 14 file (Vitest 3, frontend + backend) | ✅ Lulus |
+| **Unit Test (wajib)** | `npm test` — 196 test / 14 file (Vitest 3, frontend + backend) | ✅ Lulus (100%) |
 | **Linter (wajib)** | `npm run lint` — ESLint 9 flat config (TypeScript + Express) | ✅ 0 error |
 | **Type Check (wajib)** | `npm run typecheck` — `tsc --noEmit` | ✅ Lulus |
 | **Coverage (opsional, target ≥ 80%)** | `npm run test:coverage` — Vitest v8 coverage + threshold 80% | ✅ Stmts 98.68% · Lines 98.68% · Branch 86.44% · Funcs 95.80% |
-| **Integration Testing (opsional)** | `features/` + `steps/` (Cucumber/Playwright BDD) | 🔶 Terpisah dari CI |
-| **SonarQube (wajib)** | Scan SonarQube Cloud via `sonarqube-scan-action` | ✅ Terkonfigurasi |
+| **Integration Testing (opsional)** | `npm run test:bdd` — Playwright + Cucumber BDD (`features/login.feature`) | ✅ 4 skenario lulus |
+| **SonarQube (wajib & opsional)** | Scan SonarQube Community Edition (lokal `localhost:9000`) via `npm run sonar` | ✅ Quality Gate OK · Reliability A · Security A · Maintainability A · Coverage 95.1% |
 
 ### Perintah Lengkap
 
 ```bash
-npm test              # Jalankan seluruh unit test (frontend + backend)
+npm test              # Jalankan seluruh 196 unit test (frontend + backend)
 npm run test:watch    # Mode watch saat development
 npm run test:coverage # Unit test + laporan coverage (threshold 80%)
 npm run test:server   # Khusus unit test backend (Express + MySQL)
-npm run lint          # Cek lint tanpa mengubah file
+npm run lint          # Cek lint tanpa mengubah file (ESLint 9)
 npm run lint:fix      # Perbaiki otomatis masalah lint yang bisa diperbaiki
 npm run typecheck     # Cek tipe TypeScript tanpa menghasilkan output
+npm run test:bdd      # Jalankan pengujian integrasi BDD Cucumber + Playwright (Headless)
+npm run test:bdd:headed # Jalankan pengujian integrasi BDD dengan browser terlihat (Demo Interaktif)
+npm run sonar:local   # Eksekusi scan SonarQube lokal sekali klik via run-sonar.ps1
 ```
 
 ### Struktur Test
@@ -126,13 +142,23 @@ npx playwright install   # sekali saja
 npm run test:bdd         # BDD Cucumber + Playwright (features/ & steps/)
 ```
 
-### Setup SonarQube Cloud
+### Setup SonarQube Community Edition (self-hosted, lokal)
 
-1. Buat proyek di [SonarQube Cloud](https://sonarcloud.io/) (organisasi `asngad-eng`, project key `asngad_e-tahfidz`).
-2. Sesuaikan `sonar.organization` dan `sonar.projectKey` di file [`sonar-project.properties`](sonar-project.properties) dengan proyek Anda.
-3. Buat **Personal Access Token** di SonarQube Cloud, lalu simpan sebagai repository secret GitHub bernama **`SONAR_TOKEN`** (Settings → Secrets and variables → Actions → New repository secret).
-4. Push ke GitHub — workflow `CI & SonarQube` akan menjalankan typecheck, lint, test + coverage, lalu mengirim hasil scan ke SonarQube Cloud.
-5. Pasang *Quality Gate* **Sonar way** (Reliability A, Maintainability A, Security A) dan pantau badge di atas README.
+1. Unduh SonarQube Community dari https://www.sonarqube.org/downloads/ (butuh Java 17+), lalu ekstrak.
+2. Jalankan server:
+   ```powershell
+   .\sonarqube-<versi>\bin\windows-x86-64\StartSonar.bat
+   ```
+   Buka **http://localhost:9000** → login `admin` / `admin` → wajib ganti password.
+3. Buat token analisis: **My Account → Security → Generate Tokens** → tipe **Project Analysis Token** → simpan.
+4. Set variabel lingkungan lalu jalankan scan dari terminal:
+   ```powershell
+   $env:SONAR_TOKEN = "<token>"
+   npm run sonar
+   ```
+   Konfigurasi scan ada di [`sonar-project.properties`](sonar-project.properties) (`sonar.host.url=http://localhost:9000`, `sonar.projectKey=asngad_e-tahfidz`).
+5. Hasil analisis (Reliability / Maintainability / Security + Coverage) tampil di **http://localhost:9000** → Quality Gate **Sonar way**.
+6. *(Opsional)* Untuk scan otomatis di GitHub Actions: set repository **variable** `SONAR_HOST_URL` (URL SonarQube yang bisa dijangkau CI) dan **secret** `SONAR_TOKEN` — bila belum diatur, langkah scan otomatis dilewati agar CI tetap hijau.
 
 ---
 
