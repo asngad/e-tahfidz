@@ -3,3 +3,16 @@ node_modules/
 .env.local
 dist/
 .DS_Store
+
+# Artefak testing & quality
+coverage/
+test-results/
+playwright-report/
+.features-gen/
+cucumber.json
+*.backup
+*.zip
+metadata.json
+migrated_prompt_history/
+.sonar-token
+.scannerwork/

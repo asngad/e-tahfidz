@@ -1,0 +1,48 @@
+
+// Bersihkan variabel proxy sistem yang tidak valid agar tidak memicu TypeError: Invalid URL pada Playwright & Node fetch
+for (const key of ['http_proxy', 'HTTP_PROXY', 'https_proxy', 'HTTPS_PROXY', 'all_proxy', 'ALL_PROXY']) {
+  const val = process.env[key];
+  if (val && !val.startsWith('http://') && !val.startsWith('https://')) {
+    delete process.env[key];
+  }
+}
+
+import { defineConfig, devices } from '@playwright/test';
+import { defineBddConfig } from 'playwright-bdd';
+
+const testDir = defineBddConfig({
+  features: 'features/**/*.feature',
+  steps: 'steps/**/*.ts',
+});
+
+export default defineConfig({
+  testDir,
+
+  fullyParallel: false,
+
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+  ],
+
+  use: {
+    baseURL: 'http://127.0.0.1:5173',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'on-first-retry',
+  },
+
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+
+  webServer: {
+    command: 'npm run dev -- --host 127.0.0.1 --port 5173 --strictPort',
+    url: 'http://127.0.0.1:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
+});

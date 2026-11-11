@@ -21,6 +21,8 @@ export const callAPI = async (url: string, payload: ApiPayload): Promise<ApiResp
         return result;
     } catch (error: any) {
         console.error("API Error Detail:", error);
-        throw new Error("Gagal terhubung ke server. " + (error.message || "Unknown error"));
+        throw new Error("Gagal terhubung ke server. " + (error.message || "Unknown error"), {
+            cause: error
+        });
     }
 };

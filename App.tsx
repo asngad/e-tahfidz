@@ -19,7 +19,8 @@ const App: React.FC = () => {
     });
 
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-        return !!localStorage.getItem('darul_kamal_user');
+        // Anggap terautentikasi hanya jika sesi tersimpan valid (user ter-parse).
+        return user !== null;
     });
     
     // API URL State - Initialize from LocalStorage or Default

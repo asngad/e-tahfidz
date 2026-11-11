@@ -1,0 +1,32 @@
+e-tahfidz/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   └── ...
+│
+├── tests/
+│   ├── features/
+│   │   ├── login.feature
+│   │   ├── admin.feature
+│   │   ├── setoran.feature
+│   │   ├── jurnal.feature
+│   │   └── integrasi.feature
+│   │
+│   ├── steps/
+│   │   ├── login.steps.ts
+│   │   ├── admin.steps.ts
+│   │   ├── setoran.steps.ts
+│   │   ├── jurnal.steps.ts
+│   │   └── integrasi.steps.ts
+│   │
+│   ├── fixtures/
+│   │   └── test-data.ts
+│   │
+│   └── support/
+│       └── hooks.ts
+│
+├── playwright.config.ts
+├── package.json
+└── ...
